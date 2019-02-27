@@ -8,11 +8,7 @@ import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import javax.jms.Destination;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class NotificationController {
@@ -23,18 +19,16 @@ public class NotificationController {
     private final String TOPIC_SENDMAIL = "dyc.topic.sendmail";
 
     @GetMapping("/test")
-    public String add() {
+    public String sendToTopic(@RequestBody EmailDto emailDto) {
         Event event = new Event();
         event.setId("1234567");
         event.setType(EventType.SENDMAIL.name());
-
-        EmailDto emailDto1 =new EmailDto(){};
-        emailDto1.setFrom("casapr@gmail.com");
-        emailDto1.setTo("lijiacheng@gmail.com");
-        emailDto1.setSubject("test mail");
-        emailDto1.setContent("testmail");
-
-        event.setMsgObj(emailDto1);
+//        EmailDto emailDto1 =new EmailDto(){};
+//        emailDto1.setFrom("casapr@gmail.com");
+//        emailDto1.setTo("lijiacheng@gmail.com");
+//        emailDto1.setSubject("test mail");
+//        emailDto1.setContent("testmail");
+        event.setMsgObj(emailDto);
         Destination destination = new ActiveMQTopic(TOPIC_SENDMAIL);
         jmsMessagingTemplate.convertAndSend(destination, JSON.toJSONString(event));
         return "success";
