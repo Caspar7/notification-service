@@ -1,0 +1,37 @@
+server:
+  address: localhost
+  port: 7777
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 20 #租期更新时间间隔（默认30秒）
+    lease-expiration-duration-in-seconds: 60 #租期到期时间（默认90秒）
+    instance-id: ${server.address}:${server.port}
+    ip-address: ${server.address}    # 使用docker部署时 指定此实例的ip
+    prefer-ip-address: true    # 注册时使用ip而不是主机名
+  client:
+    healthcheck:
+      enabled: true #开启健康检查（需要spring-boot-starter-actuator依赖）
+    serviceUrl:
+      defaultZone: http://${server.address}:1111/eureka/
+
+spring:
+  jms:
+    pub-sub-domain: true  #使用topic模式开启
+  activemq:
+    user: admin
+    password: 123456
+    broker-url: tcp://localhost:61616
+    in-memory: false
+    #必须使用连接池
+    pool:
+      #启用连接池
+      enabled: true
+      #最大链接数
+      max-connections: 5
+      #空闲连接过期时间 默认30秒
+      idle-timeout: 30s
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
