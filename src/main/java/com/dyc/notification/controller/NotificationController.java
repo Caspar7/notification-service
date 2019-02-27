@@ -18,7 +18,7 @@ public class NotificationController {
 
     private final String TOPIC_SENDMAIL = "dyc.topic.sendmail";
 
-    @GetMapping("/test")
+    @PostMapping("/test")
     public String sendToTopic(@RequestBody EmailDto emailDto) {
         Event event = new Event();
         event.setId("1234567");
